@@ -1,0 +1,65 @@
+:root {
+  background: #dce3df;
+  color: #17211f;
+  font-family: Bahnschrift, "Trebuchet MS", sans-serif;
+}
+
+body { margin: 0; min-width: 320px; }
+
+.vss-preview {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: minmax(720px, 1fr) minmax(300px, 360px);
+  height: 100vh;
+  padding: 12px;
+}
+
+.vss-preview > .vss-editor { min-height: 0; }
+.vss-preview .vss-workspace { height: calc(100vh - 78px); }
+
+.vss-source-preview {
+  background: #111b1a;
+  border: 1px solid #34423f;
+  border-radius: 8px;
+  color: #dce8e3;
+  display: grid;
+  grid-template-rows: 52px minmax(0, 1fr) 30px;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.vss-source-preview header {
+  align-items: center;
+  border-bottom: 1px solid #34423f;
+  display: flex;
+  justify-content: space-between;
+  padding: 0 13px;
+}
+
+.vss-source-preview header div { display: grid; gap: 2px; }
+.vss-source-preview header strong { font-size: 13px; }
+.vss-source-preview header span { color: #8fa39c; font-size: 10px; text-transform: uppercase; }
+.vss-source-preview header label { align-items: center; color: #8fa39c; display: flex; font-size: 10px; gap: 6px; text-transform: uppercase; }
+.vss-source-preview header select { background: #263a36; border: 1px solid #49605a; border-radius: 4px; color: #dce8e3; font-size: 11px; max-width: 130px; padding: 4px; }
+.vss-source-preview output { background: #263a36; border-radius: 10px; color: #b8d8cf; font-size: 10px; padding: 3px 7px; }
+
+.vss-source-preview textarea {
+  background: #111b1a;
+  border: 0;
+  color: #dce8e3;
+  font-family: "Cascadia Code", Consolas, monospace;
+  font-size: 12px;
+  line-height: 1.65;
+  outline: 0;
+  padding: 14px;
+  resize: none;
+  white-space: pre;
+}
+
+.vss-source-preview textarea:focus { box-shadow: inset 3px 0 #54d2bd; }
+.vss-source-preview footer { align-items: center; border-top: 1px solid #34423f; color: #8fa39c; display: flex; font-size: 10px; justify-content: flex-end; padding: 0 12px; }
+
+@media (max-width: 1050px) {
+  .vss-preview { grid-template-columns: 1fr; grid-template-rows: minmax(620px, 1fr) 380px; height: auto; }
+  .vss-preview .vss-workspace { height: 620px; }
+}

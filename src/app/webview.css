@@ -1,0 +1,72 @@
+:root {
+  color-scheme: light dark;
+  font-family: var(--vscode-font-family);
+  color: var(--vscode-foreground);
+  background: var(--vscode-editor-background);
+  font-synthesis: none;
+  --line: color-mix(in srgb, var(--vscode-foreground) 18%, transparent);
+  --quiet: color-mix(in srgb, var(--vscode-foreground) 66%, transparent);
+  --green: #2fb37c;
+}
+
+* { box-sizing: border-box; }
+html, body, #root { height: 100%; min-width: 480px; margin: 0; }
+body { overflow: hidden; background: var(--vscode-editor-background); }
+button { font: inherit; }
+button:focus-visible { outline: 2px solid var(--vscode-focusBorder, #007fd4); outline-offset: 2px; }
+
+.app-shell { display: grid; grid-template-columns: 230px minmax(0, 1fr); height: 100%; }
+.app-shell.catalog-collapsed { grid-template-columns: 36px minmax(0, 1fr); }
+.skill-catalog { min-width: 0; overflow: auto; padding: 14px 8px; border-right: 1px solid var(--line); background: var(--vscode-sideBar-background); }
+.skill-catalog.collapsed { overflow: hidden; padding: 8px 4px; }
+.catalog-header { display: flex; align-items: center; gap: 4px; margin-bottom: 10px; }
+.catalog-title { flex: 1; padding: 0 8px; color: var(--vscode-sideBarTitle-foreground); font-size: 11px; font-weight: 700; text-transform: uppercase; }
+.catalog-toggle { width: 26px; height: 26px; flex: none; padding: 0; border: 0; border-radius: 3px; color: var(--vscode-sideBar-foreground); background: transparent; cursor: pointer; }
+.catalog-toggle:hover { background: var(--vscode-toolbar-hoverBackground, var(--vscode-list-hoverBackground)); }
+.skill-catalog.collapsed .catalog-header { justify-content: center; margin: 0; }
+.catalog-filter { width: 100%; box-sizing: border-box; margin: 0 0 10px; padding: 4px 6px; border: 1px solid var(--vscode-input-border, transparent); border-radius: 2px; background: var(--vscode-input-background); color: var(--vscode-input-foreground); font: inherit; font-size: 12px; }
+.catalog-filter:focus { outline: 1px solid var(--vscode-focusBorder); outline-offset: -1px; }
+.catalog-group { margin: 0 0 16px; }
+.catalog-group h2 { margin: 0; padding: 5px 8px; overflow: hidden; color: var(--quiet); font-size: 10px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.catalog-skill { width: 100%; min-width: 0; display: block; padding: 7px 8px; border: 0; border-left: 2px solid transparent; border-radius: 3px; color: var(--vscode-sideBar-foreground); background: transparent; text-align: left; cursor: pointer; }
+.catalog-skill:hover { background: var(--vscode-list-hoverBackground); }
+.catalog-skill.selected { border-left-color: var(--green); background: var(--vscode-list-activeSelectionBackground); color: var(--vscode-list-activeSelectionForeground); }
+.catalog-skill strong, .catalog-skill span { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.catalog-skill strong { font-size: 12px; }
+.catalog-skill span { margin-top: 2px; color: var(--quiet); font: 9px var(--vscode-editor-font-family); }
+.catalog-empty { margin: 0; padding: 8px; color: var(--quiet); font-size: 11px; line-height: 1.4; }
+.catalog-scanning { display: flex; align-items: center; gap: 6px; margin: 0; padding: 8px; color: var(--quiet); font-size: 11px; }
+.catalog-spinner { width: 12px; height: 12px; flex: none; border: 2px solid currentColor; border-top-color: transparent; border-radius: 50%; animation: catalog-spin 800ms linear infinite; }
+
+@keyframes catalog-spin { to { transform: rotate(360deg); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .catalog-spinner { animation-duration: 3s; }
+}
+
+.graph-host { display: flex; min-width: 0; min-height: 0; }
+.skill-search { position: relative; width: min(420px, 100%); }
+.skill-search > input { width: 100%; height: 29px; padding: 4px 9px; border: 1px solid var(--vscode-input-border, transparent); border-radius: 3px; outline: none; color: var(--vscode-input-foreground); background: var(--vscode-input-background); font: inherit; font-size: 12px; }
+.skill-search > input:focus { border-color: var(--vscode-focusBorder); }
+.skill-search-results { position: absolute; top: calc(100% + 3px); left: 0; right: 0; max-height: min(320px, 60vh); overflow: auto; padding: 4px; border: 1px solid var(--vscode-widget-border, var(--line)); border-radius: 4px; background: var(--vscode-quickInput-background, var(--vscode-editorWidget-background)); box-shadow: 0 6px 18px color-mix(in srgb, #000 28%, transparent); }
+.skill-search-results button { width: 100%; display: block; padding: 7px 8px; border: 0; border-radius: 3px; color: var(--vscode-quickInput-foreground, var(--vscode-foreground)); background: transparent; text-align: left; cursor: pointer; }
+.skill-search-results button:hover, .skill-search-results button[aria-selected="true"] { background: var(--vscode-quickInputList-focusBackground, var(--vscode-list-activeSelectionBackground)); color: var(--vscode-quickInputList-focusForeground, var(--vscode-list-activeSelectionForeground)); }
+.skill-search-results .skill-search-name { display: block; overflow: hidden; font-size: 12px; font-weight: 400; text-overflow: ellipsis; white-space: nowrap; }
+.skill-search-results .skill-search-match { display: inline; color: var(--vscode-list-highlightForeground, var(--green)); font-weight: 700; }
+.skill-search-results p { margin: 0; padding: 8px; color: var(--quiet); font-size: 11px; }
+.graph-content { flex: 1; display: flex; min-width: 0; min-height: 0; }
+.empty-state { margin: auto; padding: 24px; color: var(--quiet); text-align: center; }
+
+/* The editor ships fixed demo dimensions; in a panel it must fill the viewport. */
+.graph-editor { flex: 1; display: flex; flex-direction: column; min-width: 0; min-height: 0; border: 0; border-radius: 0; }
+.graph-editor .vss-workspace { flex: 1; height: auto; min-height: 0; }
+
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); white-space: nowrap; }
+
+@media (max-width: 620px) {
+  html, body, #root { min-width: 320px; }
+  .app-shell { grid-template-columns: 1fr; grid-template-rows: minmax(0, 200px) minmax(0, 1fr); }
+  .app-shell.catalog-collapsed { grid-template-columns: 1fr; grid-template-rows: 36px minmax(0, 1fr); }
+  .skill-catalog { border-right: 0; border-bottom: 1px solid var(--line); }
+  .skill-catalog.collapsed { padding: 4px; }
+}

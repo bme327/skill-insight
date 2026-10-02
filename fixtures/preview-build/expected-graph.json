@@ -1,0 +1,378 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "skill_ed96928a",
+  "name": "preview-build",
+  "description": "Build a package and start its local preview server",
+  "provider": "markdown",
+  "sourceUri": "fixtures/preview-build/SKILL.md",
+  "declaredTools": [
+    "create_and_run_task",
+    "terminal_last_command"
+  ],
+  "nodes": [
+    {
+      "id": "trigger_20a0b13f",
+      "kind": "trigger",
+      "title": "/preview-build",
+      "detail": "Build a package and start its local preview server",
+      "source": {
+        "uri": "fixtures/preview-build/SKILL.md",
+        "start": {
+          "line": 2,
+          "column": 1,
+          "offset": 4
+        },
+        "end": {
+          "line": 2,
+          "column": 20,
+          "offset": 23
+        }
+      },
+      "capabilities": [],
+      "inferred": false,
+      "confidence": 1,
+      "raw": {}
+    },
+    {
+      "id": "input_dc8f645f",
+      "kind": "input",
+      "title": "Argument",
+      "detail": "package name (optional)",
+      "source": {
+        "uri": "fixtures/preview-build/SKILL.md",
+        "start": {
+          "line": 7,
+          "column": 1,
+          "offset": 153
+        },
+        "end": {
+          "line": 7,
+          "column": 39,
+          "offset": 191
+        }
+      },
+      "capabilities": [],
+      "inferred": false,
+      "confidence": 1,
+      "raw": {}
+    },
+    {
+      "id": "permission_7a6a6801",
+      "kind": "permission",
+      "title": "Declared tools",
+      "detail": "create_and_run_task, terminal_last_command",
+      "source": {
+        "uri": "fixtures/preview-build/SKILL.md",
+        "start": {
+          "line": 4,
+          "column": 1,
+          "offset": 88
+        },
+        "end": {
+          "line": 4,
+          "column": 15,
+          "offset": 102
+        }
+      },
+      "capabilities": [
+        {
+          "kind": "tool",
+          "value": "create_and_run_task",
+          "declared": true
+        },
+        {
+          "kind": "tool",
+          "value": "terminal_last_command",
+          "declared": true
+        }
+      ],
+      "inferred": false,
+      "confidence": 1,
+      "raw": {}
+    },
+    {
+      "id": "action_c7677055",
+      "kind": "action",
+      "title": "Resolve the requested package target from the argument",
+      "detail": "Resolve the requested package target from the argument.",
+      "source": {
+        "uri": "fixtures/preview-build/SKILL.md",
+        "start": {
+          "line": 14,
+          "column": 4,
+          "offset": 258
+        },
+        "end": {
+          "line": 14,
+          "column": 59,
+          "offset": 313
+        }
+      },
+      "capabilities": [],
+      "inferred": true,
+      "confidence": 0.5,
+      "raw": {}
+    },
+    {
+      "id": "action_a01d318d",
+      "kind": "action",
+      "title": "Build the shared libraries and the selected package",
+      "detail": "Build the shared libraries and the selected package.",
+      "source": {
+        "uri": "fixtures/preview-build/SKILL.md",
+        "start": {
+          "line": 15,
+          "column": 4,
+          "offset": 317
+        },
+        "end": {
+          "line": 15,
+          "column": 56,
+          "offset": 369
+        }
+      },
+      "capabilities": [],
+      "inferred": true,
+      "confidence": 0.5,
+      "raw": {}
+    },
+    {
+      "id": "toolCall_036f0788",
+      "kind": "toolCall",
+      "title": "Start the local preview server with create_and_run_task",
+      "detail": "Start the local preview server with create_and_run_task.",
+      "source": {
+        "uri": "fixtures/preview-build/SKILL.md",
+        "start": {
+          "line": 16,
+          "column": 4,
+          "offset": 373
+        },
+        "end": {
+          "line": 16,
+          "column": 62,
+          "offset": 431
+        }
+      },
+      "capabilities": [
+        {
+          "kind": "tool",
+          "value": "create_and_run_task",
+          "declared": true
+        }
+      ],
+      "inferred": true,
+      "confidence": 0.7,
+      "raw": {}
+    },
+    {
+      "id": "validation_2c671ba3",
+      "kind": "validation",
+      "title": "Wait for the readiness signal on port 8181",
+      "detail": "Wait for the readiness signal on port 8181.",
+      "source": {
+        "uri": "fixtures/preview-build/SKILL.md",
+        "start": {
+          "line": 17,
+          "column": 4,
+          "offset": 435
+        },
+        "end": {
+          "line": 17,
+          "column": 47,
+          "offset": 478
+        }
+      },
+      "capabilities": [],
+      "inferred": true,
+      "confidence": 0.7,
+      "raw": {}
+    },
+    {
+      "id": "output_6774c4a9",
+      "kind": "output",
+      "title": "Report the preview URL to the user",
+      "detail": "Report the preview URL to the user.",
+      "source": {
+        "uri": "fixtures/preview-build/SKILL.md",
+        "start": {
+          "line": 18,
+          "column": 4,
+          "offset": 482
+        },
+        "end": {
+          "line": 18,
+          "column": 39,
+          "offset": 517
+        }
+      },
+      "capabilities": [],
+      "inferred": true,
+      "confidence": 0.7,
+      "raw": {}
+    },
+    {
+      "id": "errorPath_54de00bd",
+      "kind": "errorPath",
+      "title": "If the build fails, report the diagnostics from terminal_la…",
+      "detail": "If the build fails, report the diagnostics from terminal_last_command.",
+      "source": {
+        "uri": "fixtures/preview-build/SKILL.md",
+        "start": {
+          "line": 20,
+          "column": 1,
+          "offset": 519
+        },
+        "end": {
+          "line": 20,
+          "column": 73,
+          "offset": 591
+        }
+      },
+      "capabilities": [
+        {
+          "kind": "tool",
+          "value": "terminal_last_command",
+          "declared": true
+        }
+      ],
+      "inferred": true,
+      "confidence": 0.7,
+      "raw": {}
+    },
+    {
+      "id": "action_8c555fec",
+      "kind": "action",
+      "title": "See the package guide for the full list of packages",
+      "detail": "See the package guide for the full list of packages.",
+      "source": {
+        "uri": "fixtures/preview-build/SKILL.md",
+        "start": {
+          "line": 22,
+          "column": 1,
+          "offset": 593
+        },
+        "end": {
+          "line": 22,
+          "column": 73,
+          "offset": 665
+        }
+      },
+      "capabilities": [
+        {
+          "kind": "file",
+          "value": "docs/packages.md",
+          "declared": false
+        }
+      ],
+      "inferred": true,
+      "confidence": 0.5,
+      "raw": {}
+    },
+    {
+      "id": "reference_d28e05b3",
+      "kind": "reference",
+      "title": "docs/packages.md",
+      "detail": "fixtures/docs/packages.md",
+      "source": {
+        "uri": "fixtures/preview-build/SKILL.md",
+        "start": {
+          "line": 22,
+          "column": 5,
+          "offset": 597
+        },
+        "end": {
+          "line": 22,
+          "column": 42,
+          "offset": 634
+        }
+      },
+      "capabilities": [
+        {
+          "kind": "file",
+          "value": "docs/packages.md",
+          "declared": false
+        }
+      ],
+      "inferred": false,
+      "confidence": 1,
+      "raw": {
+        "resolved": "fixtures/docs/packages.md",
+        "rejection": null
+      }
+    }
+  ],
+  "edges": [
+    {
+      "id": "edge_b97bab4a",
+      "from": "trigger_20a0b13f",
+      "to": "input_dc8f645f",
+      "kind": "dataFlow",
+      "label": "argument"
+    },
+    {
+      "id": "edge_fce5954e",
+      "from": "trigger_20a0b13f",
+      "to": "permission_7a6a6801",
+      "kind": "then",
+      "label": ""
+    },
+    {
+      "id": "edge_d350cf3b",
+      "from": "permission_7a6a6801",
+      "to": "action_c7677055",
+      "kind": "then",
+      "label": ""
+    },
+    {
+      "id": "edge_446ad722",
+      "from": "action_c7677055",
+      "to": "action_a01d318d",
+      "kind": "then",
+      "label": ""
+    },
+    {
+      "id": "edge_cdafb14a",
+      "from": "action_a01d318d",
+      "to": "toolCall_036f0788",
+      "kind": "then",
+      "label": ""
+    },
+    {
+      "id": "edge_018799d2",
+      "from": "toolCall_036f0788",
+      "to": "validation_2c671ba3",
+      "kind": "then",
+      "label": ""
+    },
+    {
+      "id": "edge_2bfa1f76",
+      "from": "validation_2c671ba3",
+      "to": "output_6774c4a9",
+      "kind": "then",
+      "label": ""
+    },
+    {
+      "id": "edge_028d2293",
+      "from": "toolCall_036f0788",
+      "to": "errorPath_54de00bd",
+      "kind": "onError",
+      "label": ""
+    },
+    {
+      "id": "edge_209d3251",
+      "from": "action_8c555fec",
+      "to": "reference_d28e05b3",
+      "kind": "dataFlow",
+      "label": "reference"
+    },
+    {
+      "id": "edge_5dae360a",
+      "from": "output_6774c4a9",
+      "to": "action_8c555fec",
+      "kind": "then",
+      "label": ""
+    }
+  ],
+  "raw": {}
+}

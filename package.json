@@ -1,0 +1,240 @@
+{
+  "name": "skill-insights",
+  "displayName": "Skill Insights",
+  "publisher": "skill-insights",
+  "version": "1.0.1",
+  "license": "MIT",
+  "private": true,
+  "type": "module",
+  "description": "Turns AI skill definitions into inspectable visual flows",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bme327/skill-insight.git"
+  },
+  "main": "./dist/extension.cjs",
+  "browser": "./dist/extension.browser.cjs",
+  "categories": [
+    "Visualization",
+    "Linters"
+  ],
+  "extensionKind": [
+    "workspace"
+  ],
+  "engines": {
+    "node": ">=20",
+    "vscode": "^1.103.0"
+  },
+  "exports": {
+    ".": "./src/index.ts",
+    "./app": "./src/app/index.ts",
+    "./editor": "./src/editor/index.ts",
+    "./ir": "./src/ir/index.ts",
+    "./parsers": "./src/parsers/index.ts",
+    "./validation": "./src/validation/index.ts"
+  },
+  "scripts": {
+    "build": "node scripts/build.mjs && tsc -p tsconfig.json",
+    "build:web": "vite build",
+    "capture:media": "node scripts/capture-media.mjs",
+    "package:readme": "node scripts/package-readme.mjs",
+    "dev": "vite",
+    "typecheck": "tsc -p tsconfig.test.json && npm run typecheck:e2e",
+    "typecheck:e2e": "tsc -p e2e/tsconfig.json",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "lint": "oxlint src e2e",
+    "check": "npm run lint && npm run typecheck && npm run build && npm run build:web && npm run test"
+  },
+  "activationEvents": [
+    "onLanguage:markdown",
+    "onChatParticipant:skillInsights",
+    "workspaceContains:**/SKILL.md",
+    "workspaceContains:**/*.instructions.md",
+    "workspaceContains:**/*.prompt.md",
+    "workspaceContains:**/*.agent.md"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "command": "skillInsights.openGraph",
+        "title": "Open Skill Graph",
+        "icon": "$(type-hierarchy-sub)"
+      },
+      {
+        "command": "skillInsights.refreshSkills",
+        "title": "Refresh Skills",
+        "icon": "$(refresh)"
+      },
+      {
+        "command": "skillInsights.validate",
+        "title": "Skill Insights: Validate Current Skill"
+      },
+      {
+        "command": "skillInsights.aiAssessment",
+        "title": "Skill Insights: AI Assessment",
+        "icon": "$(sparkle)"
+      },
+      {
+        "command": "skillInsights.showAssessmentHistory",
+        "title": "Skill Insights: Show AI Assessment History"
+      },
+      {
+        "command": "skillInsights.clearAssessmentHistory",
+        "title": "Skill Insights: Clear AI Assessment History"
+      },
+      {
+        "command": "skillInsights.resetAssessmentConsent",
+        "title": "Skill Insights: Reset AI Assessment Consent"
+      }
+    ],
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "skillInsights",
+          "title": "Skill Insights",
+          "icon": "media/logo-constellation.svg"
+        }
+      ]
+    },
+    "views": {
+      "skillInsights": [
+        {
+          "id": "skillInsights.skillCatalog",
+          "name": "Skills",
+          "type": "webview"
+        }
+      ]
+    },
+    "menus": {
+      "view/title": [
+        {
+          "command": "skillInsights.openGraph",
+          "when": "view == skillInsights.skillCatalog",
+          "group": "navigation@1"
+        },
+        {
+          "command": "skillInsights.refreshSkills",
+          "when": "view == skillInsights.skillCatalog",
+          "group": "navigation@2"
+        }
+      ],
+      "editor/title": [
+        {
+          "command": "skillInsights.openGraph",
+          "when": "skillInsights.activeEditorIsSkill",
+          "group": "navigation@10"
+        },
+        {
+          "command": "skillInsights.aiAssessment",
+          "when": "skillInsights.activeEditorIsSkill",
+          "group": "navigation@11"
+        }
+      ],
+      "editor/context": [
+        {
+          "command": "skillInsights.openGraph",
+          "when": "skillInsights.activeEditorIsSkill",
+          "group": "navigation@10"
+        }
+      ],
+      "explorer/context": [
+        {
+          "command": "skillInsights.openGraph",
+          "when": "resourceFilename in skillInsights.skillResourceNames",
+          "group": "navigation@10"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Skill Insights",
+      "properties": {
+        "skillInsights.includePersonalSkills": {
+          "type": "boolean",
+          "default": true,
+          "scope": "window",
+          "description": "Include skills from built-in and configured personal locations. Turn off to discover only workspace and explicitly opened skill files."
+        },
+        "skillInsights.personalSkillLocations": {
+          "type": "array",
+          "default": [],
+          "items": {
+            "type": "string"
+          },
+          "description": "Additional file-system paths or URIs searched for personal skills."
+        },
+        "skillInsights.aiAssessment.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Offer AI assessment when a language model provider such as GitHub Copilot is available."
+        },
+        "skillInsights.aiAssessment.model": {
+          "type": "string",
+          "default": "",
+          "description": "Language model family to prefer. Empty uses the default available model."
+        },
+        "skillInsights.aiAssessment.historyLimit": {
+          "type": "number",
+          "default": 200,
+          "minimum": 1,
+          "description": "Maximum number of AI assessment reports kept locally."
+        }
+      }
+    },
+    "chatParticipants": [
+      {
+        "id": "skillInsights",
+        "name": "skillInsights",
+        "fullName": "Skill Insights",
+        "description": "Explain and validate the active AI skill",
+        "isSticky": true,
+        "commands": [
+          {
+            "name": "explain",
+            "description": "Explain the active skill graph"
+          },
+          {
+            "name": "validate",
+            "description": "Validate the active skill"
+          },
+          {
+            "name": "fix",
+            "description": "Suggest fixes for active findings"
+          },
+          {
+            "name": "skillinsights-review",
+            "description": "Review the active skill with the selected model"
+          }
+        ]
+      }
+    ]
+  },
+  "dependencies": {
+    "lucide-react": "^1.31.0",
+    "mdast-util-to-string": "^4.0.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "remark-gfm": "^4.0.1",
+    "remark-parse": "^11.0.0",
+    "unified": "^11.0.5",
+    "unist-util-visit": "^5.0.0",
+    "yaml": "^2.6.1",
+    "zod": "^3.24.1"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.63.0",
+    "@types/mdast": "^4.0.4",
+    "@types/node": "^24.13.3",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "@types/unist": "^3.0.3",
+    "@types/vscode": "1.103.0",
+    "esbuild": "^0.25.12",
+    "gifenc": "^1.0.3",
+    "oxlint": "^1.75.0",
+    "typescript": "~5.7.2",
+    "vite": "^7.1.3",
+    "vitest": "^4.1.11"
+  }
+}

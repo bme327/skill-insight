@@ -1,0 +1,20 @@
+.github/
+.vscode/
+coverage/
+docs/
+fixtures/
+node_modules/
+scripts/
+src/
+*.tsbuildinfo
+tsconfig*.json
+vitest.config.ts
+# DETAILS.md is packaged as the marketplace readme; shipping README.md too
+# collides with it case-insensitively inside the VSIX.
+README.md
+# Only consumed by `vsce package --readme-path`; not needed in the shipped VSIX.
+dist/readme.md
+# Readme images are inlined as data URIs at package time; only the view icon ships.
+media/*.gif
+media/*.png
+media/screenshots/
