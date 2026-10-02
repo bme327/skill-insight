@@ -1,0 +1,21 @@
+changelog:
+  exclude:
+    labels:
+      - skip-changelog
+    authors:
+      - dependabot
+      - github-actions
+  # No `labels: ['*']` catch-all, so PRs without one of these labels are omitted.
+  categories:
+    - title: Security
+      labels:
+        - security
+    - title: Enhancements
+      labels:
+        - enhancement
+    - title: Fixes
+      labels:
+        - bug
+    - title: Documentation
+      labels:
+        - documentation

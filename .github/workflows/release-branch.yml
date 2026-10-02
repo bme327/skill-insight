@@ -1,0 +1,80 @@
+name: Release branch
+
+on:
+  create:
+
+permissions:
+  contents: write
+
+jobs:
+  package-and-release:
+    if: github.event.ref_type == 'branch' && startsWith(github.event.ref, 'release/')
+    runs-on: ubuntu-latest
+    env:
+      BRANCH_NAME: ${{ github.event.ref }}
+      RELEASE_TAG: release-${{ github.run_id }}
+    steps:
+      - name: Check out release branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.ref }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      # Build number is derived from the branch name so every release bumps it,
+      # even with no diff - major/minor are still bumped by hand in package.json.
+      - name: Bump version from branch name
+        id: version
+        run: |
+          SUFFIX="${BRANCH_NAME#release/}"
+          if [[ ! "$SUFFIX" =~ ^([0-9]{4})-([0-9]{2})-([0-9]{2})\.([0-9]+)$ ]]; then
+            echo "Branch name '$BRANCH_NAME' does not match release/<year>-<month>-<day>.<daybuild>" >&2
+            exit 1
+          fi
+          YEAR="${BASH_REMATCH[1]}"
+          MONTH="${BASH_REMATCH[2]}"
+          DAY="${BASH_REMATCH[3]}"
+          DAYBUILD=$(printf "%02d" "${BASH_REMATCH[4]}")
+          MAJOR_MINOR=$(node -p "require('./package.json').version.split('.').slice(0,2).join('.')")
+          VERSION="$MAJOR_MINOR.$YEAR$MONTH$DAY$DAYBUILD"
+          npm version "$VERSION" --no-git-tag-version --allow-same-version
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "VSIX_PATH=skill-insights-$VERSION.vsix" >> "$GITHUB_ENV"
+
+      - name: Commit version bump
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git commit -am "chore: bump version to ${{ steps.version.outputs.version }}"
+          git push origin "HEAD:${{ env.BRANCH_NAME }}"
+
+      - name: Build extension
+        run: npm run build
+
+      # The Details webview's CSP only allows https:/data: image sources, so relative
+      # links never load - inline screenshots as data URIs before packaging.
+      - name: Inline readme images
+        run: npm run package:readme
+
+      - name: Package VS Code extension
+        run: npx --yes @vscode/vsce@3.9.2 package --skip-license --readme-path dist/readme.md --out "$VSIX_PATH"
+
+      - name: Publish GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release upload "$RELEASE_TAG" "$VSIX_PATH" --clobber
+          else
+            gh release create "$RELEASE_TAG" "$VSIX_PATH" \
+              --target "$BRANCH_NAME" \
+              --title "$BRANCH_NAME" \
+              --generate-notes
+          fi
